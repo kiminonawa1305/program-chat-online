@@ -22,13 +22,15 @@ public class MessageController {
     private DateTimeFormatter formatter;
 
     @GetMapping
-    private String test(){
+    private String test() {
         return "Hello World";
     }
 
+    /*6. Hệ thống lưu tin nhắn vào database của Firebase.*/
     @GetMapping("/{type}/{id}")
     public String test(@PathVariable("type") String type, @PathVariable("id") String roomId) throws ExecutionException, InterruptedException {
         CompletableFuture<String> future = new CompletableFuture<>();
+        createDatabaseReference(roomId);
         reference.child("room_chats").child(roomId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -42,6 +44,11 @@ public class MessageController {
             }
         });
         return future.get();
+    }
+
+    /*5. Hệ thống nhận roomId và tạo 1 kết nối tới DatabaseReference*/
+    private void createDatabaseReference(String roomId) {
+        reference.child(roomId);
     }
 
     @PostMapping("/send/{type}/{id}")
