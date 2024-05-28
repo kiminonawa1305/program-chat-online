@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.common.value.qual.EnumVal;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 @Data
 @Builder
@@ -22,9 +24,11 @@ public class Message {
     @NotBlank(message = "User send is not null!")
     private String userId;
 
-    private Enum status;
+    @EnumVal({"SENT", "RECEIVED", "READ", "REDEEM"})
+    private String status;
 
     private String time;
+
 
     public @NotNull(message = "Message is not null!") @NotBlank(message = "Message is not null!") String getMessage() {
         return message;
@@ -42,11 +46,11 @@ public class Message {
         this.userId = userId;
     }
 
-    public Enum getStatus() {
+    public @EnumVal({"SENT", "RECEIVED", "READ", "REDEEM"}) String getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(@EnumVal({"SENT", "RECEIVED", "READ", "REDEEM"}) String status) {
         this.status = status;
     }
 
