@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.common.value.qual.EnumVal;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.Collection;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Message {
+public class Message implements Serializable {
     @NotNull(message = "Message is not null!")
     @NotBlank(message = "Message is not null!")
     private String message;

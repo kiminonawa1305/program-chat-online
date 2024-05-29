@@ -34,20 +34,19 @@ public class MessageController {
     }
 
     /*6. Hệ thống lưu tin nhắn vào database của Firebase.*/
-    @GetMapping("/{type}/{id}")
-    public String test(@PathVariable("type") String type, @PathVariable("id") String roomId) throws ExecutionException, InterruptedException {
-        CompletableFuture<String> future = new CompletableFuture<>();
+    @PostMapping("/{type}/{id}")
+    public String test(@PathVariable("type") String type,
+                       @PathVariable("id") String roomId,
+                       @PathVariable Message message) throws ExecutionException, InterruptedException {
+        reference.child(type);
         createDatabaseReference(roomId);
-        reference.child("room_chats").child(roomId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue().toString();
-                future.complete(value);
-            }
 
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        reference.setValue(message, new DatabaseReference.CompletionListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                future.completeExceptionally(new RuntimeException(databaseError.getMessage()));
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                future.complete("complete");
             }
         });
         return future.get();
@@ -95,7 +94,7 @@ public class MessageController {
                     try {
                         message = snapshot.getValue(Message.class);
                     } catch (Exception e) {
-                       System.out.println(e);
+                        System.out.println(e);
                     }
 
 
